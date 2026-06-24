@@ -7,6 +7,8 @@ Backup de configurações personalizadas do Hyprland baseado no dotfiles [illogi
 - **Configuração de Monitores**: Setup com dois monitores (Notebook eDP-1 + Monitor Externo DP-1)
 - **Transparência e Animações**: Blur, shadow, dim_inactive configurado
 - **Atalho para alternar Teclado**: Inglês ↔ Português (Super + Espaço)
+- **Áudio e Bluetooth**: Scripts de diagnóstico e sincronização de drivers/daemons
+- **Rede/WiFi**: Configuração de NetworkManager e conectividade
 
 ## 🖥️ Configurações Principais
 
@@ -69,7 +71,25 @@ O script irá:
 - Copiar nova configuração
 - Recarregar Hyprland
 
-### 2. Manual
+### 2. Audio e Bluetooth (Novo!)
+
+Para sincronizar drivers de áudio e Bluetooth com esta instalação:
+
+```bash
+# Auditar sistema
+bash scripts/audit_audio_bluetooth.sh
+
+# Sincronizar (com múltiplas confirmações de segurança)
+sudo bash scripts/sync_audio_bluetooth.sh
+
+# Apenas verificar compatibilidade
+sudo bash scripts/sync_audio_bluetooth.sh --check
+
+# Simular mudanças (sem fazer nada)
+sudo bash scripts/sync_audio_bluetooth.sh --dry-run
+```
+
+Veja `AUDIO_BLUETOOTH.md` para detalhes completos.
 
 ```bash
 # Backup das configurações atuais
@@ -134,20 +154,26 @@ decoration {
 }
 ```
 
-## 🗂️ Estrutura
+## 📋 Estrutura
 
 ```
 hyprEnd-backup/
+├── README.md                            (Este arquivo - guia principal)
+├── CUSTOMIZATION.md                     (Detalhes: monitores, transparência, teclado)
+├── AUDIO_BLUETOOTH.md                   (Guia completo de áudio e Bluetooth) ⭐ NOVO
+├── AUDIO_BLUETOOTH_REFERENCE.md         (Referência desta instalação) ⭐ NOVO
+├── .gitignore
 ├── config/hypr/
-│   ├── monitors.conf              # Configuração de monitores
-│   ├── general.conf               # Configurações gerais (blur, shadow, etc)
-│   ├── custom-keybinds.conf       # Atalhos customizados
-│   ├── custom-general.conf        # Configurações customizadas
-│   └── hypridle.conf              # Configuração do idle (screen lock)
-├── scripts/
-│   ├── install.sh                 # Script de instalação automática
-│   └── update.sh                  # Script para atualizar backup
-└── README.md                       # Este arquivo
+│   ├── monitors.conf                    (Configuração de monitores)
+│   ├── general.conf                     (Configurações gerais: blur, shadow, transparência)
+│   ├── hypridle.conf                    (Configuração de idle/screen lock)
+│   ├── custom-keybinds.conf             (Atalhos customizados)
+│   └── custom-general.conf              (Configurações customizadas)
+└── scripts/
+    ├── install.sh                       (Instalar configurações Hyprland)
+    ├── update.sh                        (Atualizar backup Hyprland)
+    ├── audit_audio_bluetooth.sh         (Auditar áudio e Bluetooth) ⭐ NOVO
+    └── sync_audio_bluetooth.sh          (Sincronizar áudio e Bluetooth) ⭐ NOVO
 ```
 
 ## 🔧 Troubleshooting
@@ -174,11 +200,40 @@ hyprctl monitors
 ### Blur muito intenso ou fraco
 Ajuste `size` (5-20) e `passes` (1-5) em `general.conf` → `decoration` → `blur`
 
+## 🔊 Áudio e Bluetooth
+
+Se estiver tendo problemas com **áudio** ou **Bluetooth** após instalar em outro PC:
+
+```bash
+# 1. Auditar o sistema
+bash scripts/audit_audio_bluetooth.sh
+
+# 2. Sincronizar drivers com esta instalação
+sudo bash scripts/sync_audio_bluetooth.sh
+
+# 3. Rebootar
+sudo reboot
+
+# 4. Verificar se funciona
+bluetoothctl list
+nmcli radio wifi
+```
+
+Para detalhes técnicos completos, veja:
+- 📖 `AUDIO_BLUETOOTH.md` - Guia completo
+- 📋 `AUDIO_BLUETOOTH_REFERENCE.md` - Configuração desta máquina
+
 ## 📚 Referências
 
+### Hyprland
 - [Hyprland Wiki - Configuração](https://wiki.hyprland.org/Configuring/Configuring-Hyprland/)
 - [illogical-impulse Dotfiles](https://github.com/illogical-impulse/hyprland-dotfiles)
 - [XKB Keyboard Layouts](https://wiki.archlinux.org/title/Xorg/Keyboard_layout)
+
+### Áudio e Bluetooth
+- [Arch Wiki - PipeWire](https://wiki.archlinux.org/title/PipeWire)
+- [Arch Wiki - Bluetooth](https://wiki.archlinux.org/title/Bluetooth)
+- [Arch Wiki - NetworkManager](https://wiki.archlinux.org/title/NetworkManager)
 
 ---
 
