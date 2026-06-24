@@ -1,0 +1,16 @@
+# Backups
+*.backup
+*.old
+*.bak
+*.swp
+*.swo
+
+# Arquivos temporários
+*~
+.DS_Store
+.vscode/
+
+# Arquivos de sistema
+.config/hypr/hyprland
+.config/hypr/*.new
+.config/hypr/*.old
